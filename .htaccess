@@ -1,0 +1,13 @@
+# Devhail — for shared hosts where the domain points at this folder
+# instead of /public. Everything is routed into /public and sensitive
+# files are never served.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.env|\.git|composer\.(json|lock)|artisan|storage|vendor|bootstrap|config|database|resources|routes|tests)(/|$) - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
