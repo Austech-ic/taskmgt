@@ -12,7 +12,9 @@ mkdir -p "$DEST"
 git -C "$ROOT" archive HEAD | tar -x -C "$DEST"
 rm -rf "$DEST/tests" "$DEST/phpunit.xml"
 
-(cd "$DEST" && composer install --no-dev --optimize-autoloader --no-interaction --quiet)
+(cd "$DEST" && composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --quiet)
+# Packages installed from source carry their full git history; it's never needed at runtime.
+find "$DEST/vendor" -name .git -type d -prune -exec rm -rf {} +
 
 mkdir -p "$ROOT/dist"
 rm -f "$ROOT/dist/devhail-$VERSION.zip"
